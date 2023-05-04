@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="fragments/config::configFragment"></th:block>
 </head>
 <body>
-$END$
+    <th:block th:replace="framents/header::headerFrament"></th:block>
+    <th:block layout:fragment="content"></th:block>
 </body>
 </html>

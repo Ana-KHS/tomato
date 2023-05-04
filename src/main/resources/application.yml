@@ -1,1 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
+
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
+    thymeleaf:
+      cache: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tomato?serverTimezone=Asia/Seoul
+    username: root
+    password: kwon7788966
+
+mybatis:
+  type-aliases-package: com.study.tomato
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
