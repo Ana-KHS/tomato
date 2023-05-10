@@ -20,7 +20,7 @@ public class LoginController {
 
 
     @GetMapping("/")
-    public String sessionCheck(HttpServletRequest httpServletRequest) {
+    public ModelAndView sessionCheck(HttpServletRequest httpServletRequest) {
         return loginService.sessionCheck(httpServletRequest);
     }
 

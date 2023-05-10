@@ -23,15 +23,21 @@ public class LoginService {
     /**
      * session user check
      */
-    public String sessionCheck(HttpServletRequest httpServletRequest) {
+    public ModelAndView sessionCheck(HttpServletRequest httpServletRequest) {
+        ModelAndView mv = new ModelAndView();
         HttpSession session = httpServletRequest.getSession();
         session.removeAttribute("session_user_id");
         String sessionUserId = (String) session.getAttribute("session_user_id");
+
         if(sessionUserId == null || sessionUserId.equals("")) {
-            return "pages/login/login";
+            mv.setViewName("redirect:/login");
         }else {
-            return "pages/tomatoMain";
+            mv.addObject("sessionUserId", sessionUserId);
+            mv.addObject("sessionUserName", session.getAttribute("session_user_name"));
+            mv.setViewName("pages/tomatoMain");
         }
+
+        return mv;
     }
 
 
@@ -42,17 +48,20 @@ public class LoginService {
         String loginPassword = httpServletRequest.getParameter("loginPassword");
 
         HttpSession session = httpServletRequest.getSession();
-        session.setAttribute("session_user_id", loginId);
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("loginId", loginId);
         param.put("loginPassword", loginPassword);
 
         List<Map<String, Object>> selectSessionUser = loginRepository.sessionLogin(param);
+        System.out.println(">>>>>>>>>>>>>>> selectSessionUser: " + selectSessionUser);
+        mv.addObject("sessionInfo", selectSessionUser);
 
         if(selectSessionUser.isEmpty()) {
             mv.addObject("result", "Fail");
         }else {
+            session.setAttribute("session_user_id", selectSessionUser.get(0).get("user_id"));
+            session.setAttribute("session_user_name", selectSessionUser.get(0).get("user_name"));
             mv.addObject("result", "Success");
             mv.setViewName("redirect:/tomato_main");
         }
@@ -66,6 +75,8 @@ public class LoginService {
         String sessionUserId = (String) session.getAttribute("session_user_id");
 
         mv.addObject("sessionUserId", sessionUserId);
+        mv.addObject("sessionUserName", session.getAttribute("session_user_name"));
+
         return mv;
     }
 }
