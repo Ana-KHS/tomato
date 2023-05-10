@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>TOMATO : 로그인</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" th:src="@{/js/login/login.js}"></script>
 </head>
 <body>
+    <input type="hidden" th:value="${result}" id="loginStatus" />
     <div>
         <form action="login" method="post">
-            <input type="text" name="loginId" />
+            <input type="text" name="loginId" autocomplete="off" />
             <input type="password" name="loginPassword"/>
             <button>로그인</button>
         </form>

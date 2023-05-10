@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,18 +25,15 @@ public class LoginService {
      */
     public String sessionCheck(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
+        session.removeAttribute("session_user_id");
         String sessionUserId = (String) session.getAttribute("session_user_id");
         if(sessionUserId == null || sessionUserId.equals("")) {
-            return "redirect:/login";
+            return "pages/login/login";
         }else {
-            session.removeAttribute("session_user_id");
             return "pages/tomatoMain";
         }
     }
 
-    public List<Map<String, Object>> selectSessionUser(Map<String, Object> param) {
-        return loginRepository.sessionLogin(param);
-    }
 
     public ModelAndView loginSession(HttpServletRequest httpServletRequest) {
         ModelAndView mv = new ModelAndView("pages/login/login");
@@ -46,33 +44,27 @@ public class LoginService {
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("session_user_id", loginId);
 
-        System.out.println(">>>>>>>>>> session.getAttribute: " + session.getAttribute("session_user_id"));
-
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("loginId", loginId);
         param.put("loginPassword", loginPassword);
 
-        List<Map<String, Object>> selectSessionUser = selectSessionUser(param);
+        List<Map<String, Object>> selectSessionUser = loginRepository.sessionLogin(param);
 
-        if(!selectSessionUser.isEmpty()) {
-            mv.setViewName("redirect:/tomato_main");
-            mv.addObject("test", "Success");
-            mv.addObject("session_user_id", loginId);
+        if(selectSessionUser.isEmpty()) {
+            mv.addObject("result", "Fail");
         }else {
-            mv.setViewName("redirect:/login");
-            mv.addObject("test", "Fail");
+            mv.addObject("result", "Success");
+            mv.setViewName("redirect:/tomato_main");
         }
-        System.out.println(mv);
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>" + param);
-        System.out.println(">>>>>>>>>>>>> 조회결과: " + selectSessionUser);
 
+        System.out.println(">>>>>>>>>>>>>> : " + mv);
         return mv;
     }
 
     public ModelAndView tomatoMain(HttpSession session) {
         ModelAndView mv = new ModelAndView("pages/tomatoMain");
         String sessionUserId = (String) session.getAttribute("session_user_id");
-        System.out.println(">>>>>>>>>>>>>>>>> sessionUserId: " + sessionUserId);
+
         mv.addObject("sessionUserId", sessionUserId);
         return mv;
     }
