@@ -15,14 +15,17 @@ spring:
     remote:
       restart:
         enabled: true
-    thymeleaf:
-      cache: false
-
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/tomato?serverTimezone=Asia/Seoul
     username: root
     password: kwon7788966
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
 
 mybatis:
   type-aliases-package: com.study.tomato
